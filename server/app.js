@@ -50,3 +50,40 @@ const io = require("socket.io")(server, {
  });
  
  server.listen(PORT_SOCKET);
+
+var mqtt = require('mqtt')
+
+var options = {
+    host: 'c3c05bf6b7ff4f5fa23905cb6c726879.s2.eu.hivemq.cloud',
+    port: 8883,
+    protocol: 'mqtts',
+    username: 'phtr311',
+    password: 'PhiTruong3120'
+}
+
+//initialize the MQTT client
+var client = mqtt.connect(options);
+
+//setup the callbacks
+client.on('connect', function () {
+    console.log('Connected');
+});
+
+client.on('error', function (error) {
+    console.log(error);
+});
+
+client.on('message', function (topic, message) {
+    //Called each time a message is received
+    console.log('Received message:', topic, message.toString());
+});
+
+// subscribe to topic 'my/test/topic'
+client.subscribe('my/test/topic');
+
+// publish message 'Hello' to topic 'my/test/topic'
+client.publish('my/test/topic', 'Hellpoooooooo');
+
+setInterval(() => {
+    client.publish('my/test/topic', '' + Math.random());
+}, 1000);
