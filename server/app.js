@@ -67,11 +67,11 @@ client.on('error', function (error) {
 io.on('connection', socketClient => {
   client.on('message', function (topic, message) {
     let arr = message.toString().split(",");
-    socketClient.emit('cpu', {
+    socketClient.emit('ppm', {
       name: tick++,
       value: arr[1]
     });
-    console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
+    // console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
   });
 });
 
