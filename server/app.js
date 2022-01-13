@@ -38,27 +38,18 @@ const io = require("socket.io")(server, {
   }
 }); 
  let tick = 0;
- io.on('connection', client => {
-   setInterval(() => {
-     os.cpuUsage(cpuPercent => {
-       client.emit('cpu', {
-         name: tick++,
-         value: cpuPercent
-       });
-     });
-   }, 1000);
- });
  
  server.listen(PORT_SOCKET);
 
 var mqtt = require('mqtt')
 
 var options = {
-    host: 'c3c05bf6b7ff4f5fa23905cb6c726879.s2.eu.hivemq.cloud',
-    port: 8883,
-    protocol: 'mqtts',
-    username: 'phtr311',
-    password: 'PhiTruong3120'
+  //host: 'c3c05bf6b7ff4f5fa23905cb6c726879.s2.eu.hivemq.cloud',
+  host: 'broker.hivemq.com',
+  port: 1883,
+  protocol: 'mqtt',
+  username: 'phtr311',
+  password: 'PhiTruong3120'
 }
 
 //initialize the MQTT client
@@ -73,17 +64,23 @@ client.on('error', function (error) {
     console.log(error);
 });
 
-client.on('message', function (topic, message) {
-    //Called each time a message is received
-    console.log('Received message:', topic, message.toString());
+io.on('connection', socketClient => {
+  client.on('message', function (topic, message) {
+    let arr = message.toString().split(",");
+    socketClient.emit('cpu', {
+      name: tick++,
+      value: arr[1]
+    });
+    console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
+  });
 });
 
 // subscribe to topic 'my/test/topic'
-client.subscribe('my/test/topic');
+client.subscribe('/hust/c3c05bf6b7ff4f5fa23905cb6c726879');
 
 // publish message 'Hello' to topic 'my/test/topic'
-client.publish('my/test/topic', 'Hellpoooooooo');
+// client.publish('my/test/topic', 'Hellpoooooooo');
 
-setInterval(() => {
-    client.publish('my/test/topic', '' + Math.random());
-}, 1000);
+// setInterval(() => {
+//     client.publish('my/test/topic', '' + Math.random());
+// }, 1000);
