@@ -31,7 +31,7 @@ mongoose.Promise = global.Promise;
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}`));
 
-const PORT_SOCKET = process.env.PORT_SOCKET || 6000;
+const PORT_SOCKET = process.env.PORT_SOCKET || 6001;
 const io = require("socket.io")(server, {
   cors: {
       origin: "*",
@@ -71,7 +71,7 @@ io.on('connection', socketClient => {
       name: tick++,
       value: arr[1]
     });
-    // console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
+    console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
   });
 });
 
