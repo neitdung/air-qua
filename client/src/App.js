@@ -12,8 +12,8 @@ const dataProvider = jsonServerProvider('https://jsonplaceholder.typicode.com');
 
 const App = () => (
   <Admin dashboard={Dashboard} dataProvider={dataProvider} authProvider={authProvider}>
-    <Resource name="Chart" list={PPM} icon={PostIcon}/>
-    <Resource name="users" options={{ label: 'Devices' }} list={UserList} icon={UserIcon} />
+    <Resource name="Chart" options={{ label: 'Đồ thị' }} list={PPM} icon={PostIcon}/>
+    <Resource name="users" options={{ label: 'Quản lý thiết bị' }} list={UserList} icon={UserIcon} />
   </Admin>
 );
 

@@ -6,7 +6,8 @@ export const UserList = props => (
     <List {...props} title="List of devices">
         <Datagrid rowClick="edit">
             <TextField source="id" />
-            <TextField source="address.city" />
+            <TextField source="address.geo.lat" />
+            <TextField source="address.geo.lng" />
             <Switch defaultChecked color="secondary" />
         </Datagrid>
     </List>

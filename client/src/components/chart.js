@@ -10,8 +10,8 @@ const socket = io('http://localhost:6001', {
 });
 
 function PPM() {
-  // let x = ['0am', 1, 2, 3, 4, 5, 6, 7, 8, 9], y = [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.041, 12.051, 12.081], hour = 0, ppmValue = 0;
-  let x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hour = 0, ppmValue = 0;
+  let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 0], y = [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.041, 12.051, 12.081], hour = 0, ppmValue = 0;
+  // let x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hour = 0, ppmValue = 0;
 
   let [data, setData] = useState({
     options: {
@@ -22,8 +22,8 @@ function PPM() {
         categories: x
       },
       yaxis: {
-        min: 10,
-        max: 15
+        min: 11,
+        max: 13
       }
     },
 
@@ -64,8 +64,8 @@ function PPM() {
               categories: x
             },
             yaxis: {
-              min: 10,
-              max: 15
+              min: 11,
+              max: 13
             }
           },
 
