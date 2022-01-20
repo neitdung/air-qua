@@ -75,15 +75,15 @@ io.on('connection', socketClient => {
       name: tick++,
       value: arr[1]
     });
-    // console.log('ClientID: ' + arr[0] + ' , PPM: '+ arr[1]);
-    let currentdate = new Date();
-    const ppm = new PPM({
-      time: currentdate,
-      value: arr[1]
-    });
-    ppm.save()
-      .then(() => true)
-      .catch(() => false);
+    
+    // let currentdate = new Date();
+    // const ppm = new PPM({
+    //   time: currentdate,
+    //   value: arr[1]
+    // });
+    // ppm.save()
+    //   .then(() => true)
+    //   .catch(() => false);
   });
 });
 
