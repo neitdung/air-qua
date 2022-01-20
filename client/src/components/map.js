@@ -50,6 +50,7 @@ export default function App() {
         <div className="App">
             <GoogleMapReact
                 bootstrapURLKeys={{
+                    key: 'AIzaSyA2OqJoCG8K6k8jB1gPUHJ51Wuo4TFgAbU',
                     language: "en",
                     region: "US"
                 }}

@@ -12,6 +12,7 @@ const socket = io('http://localhost:6001', {
 function PPM() {
   let x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 0], y = [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.041, 12.051, 12.081], hour = 0, ppmValue = 0;
   // let x = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], hour = 0, ppmValue = 0;
+  let yMin = 11, yMax = 13;
 
   let [data, setData] = useState({
     options: {
@@ -38,6 +39,9 @@ function PPM() {
   // 1. listen for a cpu event and update the state
   useEffect(() => {
     socket.on('ppm', ppm => {
+      yMin = parseInt(ppm.value) - 2;
+      yMax = parseInt(ppm.value) + 2;
+
       if (x[9] == 0) {
         x = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
         y = [ppm.value, ppm.value, ppm.value, ppm.value, ppm.value, ppm.value, ppm.value, ppm.value, ppm.value, ppm.value];
@@ -64,8 +68,8 @@ function PPM() {
               categories: x
             },
             yaxis: {
-              min: 11,
-              max: 13
+              min: yMin,
+              max: yMax
             }
           },
 
