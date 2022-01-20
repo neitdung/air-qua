@@ -5,6 +5,14 @@ import io from 'socket.io-client';
 import GoogleMapReact from "google-map-react";
 import MyMarker from "./MyMarker";
 
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
 // implementation of this function is needed for codesandbox example to work
 // you can remove it otherwise
 const distanceToMouse = (pt, mp) => {
@@ -23,7 +31,7 @@ const distanceToMouse = (pt, mp) => {
 // ];
 
 const socket = io('http://localhost:6001', {
-  transports: ['websocket', 'polling'],
+    transports: ['websocket', 'polling'],
 });
 
 export default function App() {
@@ -44,10 +52,86 @@ export default function App() {
                 return currentData;
             })
         });
-      }, []);
+    }, []);
+
+    let Node = {
+        id: 0,
+        lat: 0,
+        lng: 0,
+        title: 'ppm'
+    };
+
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (e) => {
+        // console.log(e)
+        setOpen(false);
+        setData(currentData => {
+            currentData.push(Node);
+
+            return currentData;
+        })
+    };
+
+    const changeId = (e) => {
+        Node.id = 12.755;
+    }
+
+    const changeLat= (e) => {
+        Node.lat = e.target.value;
+    }
+
+    const changeLng = (e) => {
+        Node.lng = e.target.value;
+    }
 
     return (
         <div className="App">
+            <div>
+                <Button variant="contained" onClick={handleClickOpen}>
+                    Thêm thiết bị
+                </Button>
+                <Dialog open={open}>
+                    <DialogTitle>Thêm thiết bị</DialogTitle>
+                    <DialogContent>
+                        <TextField onChange={changeId}
+                            autoFocus
+                            margin="dense"
+                            id="id"
+                            label="ID"
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField onChange={changeLat}
+                            autoFocus
+                            margin="dense"
+                            id="lat"
+                            label="Lat"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                        />
+                        <TextField onChange={changeLng}
+                            autoFocus
+                            margin="dense"
+                            id="lng"
+                            label="Lng"
+                            type="number"
+                            fullWidth
+                            variant="standard"
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleClose}>Subscribe</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
             <GoogleMapReact
                 bootstrapURLKeys={{
                     key: 'AIzaSyA2OqJoCG8K6k8jB1gPUHJ51Wuo4TFgAbU',
