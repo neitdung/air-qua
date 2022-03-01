@@ -8,11 +8,13 @@ const PPMController = require('./controller/PPMController');
 const MINController = require('./controller/min.controller');
 const HOURController = require('./controller/hour.controller');
 const DAYController = require('./controller/day.controller');
+const DeviceController = require('./controller/device.controller');
 const PPM = require('./model/ppm.model');
 const MIN = require('./model/min.model');
 const HOUR = require('./model/hour.model');
 const DAY = require('./model/day.model');
 const cors = require('cors');
+var bodyParser = require('body-parser')
 
 const os = require('os-utils');
 // const passport = require("passport");
@@ -38,10 +40,17 @@ mongoose.Promise = global.Promise;
 // app.use("/api/user/", require("./route/user"));
 // app.use("/api/week/", require("./route/week"));
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
+app.use(express.json());
 app.use('/get', PPMController.show);
 app.use('/min', MINController.show);
 app.use('/hour', HOURController.show);
 app.use('/day', DAYController.show);
+app.use('/postData', DeviceController.save);
+app.use('/devices', DeviceController.show);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}`));

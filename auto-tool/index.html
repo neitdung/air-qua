@@ -6,33 +6,89 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Esp32 Auto Tool</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
-        integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
-        crossorigin="anonymous"></script>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Auto Tools</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <!-- <li><a href="#">Page 1</a></li>
+                <li><a href="#">Page 2</a></li>
+                <li><a href="#">Page 3</a></li> -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form action="#">
+            <div class="form-group">
+                <label for="device-number">Số lượng thiết bị:</label>
+                <input type="number" class="form-control" id="device-number">
+            </div>
+            <div class="form-group">
+                <label for="time">Thời gian gửi dữ liệu (s):</label>
+                <input type="number" class="form-control" id="time">
+            </div>
+            <button id="submit" type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
 
     <script>
-        const socket = io('http://localhost:6001', {
-            transports: ['websocket', 'polling'],
+        var prevNowPlaying = null;
+
+        $('#submit').on('click', function () {
+            const devices = $('#device-number').val();
+            const time = $('#time').val();
+            if (!devices || !time) {
+                return;
+            }
+
+            let arrData = [];
+            for (var i = 1; i <= devices; i++) {
+                arrData.push({
+                    id: (12 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4),
+                    title: 'ppm',
+                    lat: (21 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(3),
+                    lng: (105 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(3),
+                });
+            }
+
+            sendData(arrData, time, devices);
         });
 
-        // socket.on('ppm', ppm => {
-        //     console.log(ppm);
-        // });
-        var tick = 1;
+        function sendData(arrData, time, devices) {
+            if (prevNowPlaying) {
+                clearInterval(prevNowPlaying);
+            }
 
-        setInterval(() => {
-            let x = (12 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4);
-            socket.emit('ppm', {
-                name: tick++,
-                value: x
-            });
-            console.log(x);
-        }, 1000);
-
+            prevNowPlaying = setInterval(function () {
+                fetch('http://localhost:5000/postData?d=' + devices + "&t=" + time, {
+                    method: 'GET'
+                })
+                    .then(() => {
+                        console.log(arrData);
+                    });
+            }, time * 1000);
+        }
     </script>
+
+    <style>
+        .form-group {
+            max-width: 300px;
+        }
+    </style>
 </body>
 
 </html>
