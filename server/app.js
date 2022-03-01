@@ -73,7 +73,7 @@ io.on('connection', socketClient => {
     let arr = message.toString().split(",");
     socketClient.emit('ppm', {
       name: tick++,
-      value: arr[1]
+      value: Math.round(parseFloat(12 + parseFloat(arr[1]) - Math.floor(arr[1])) * 1000)/1000
     });
     
     // let currentdate = new Date();

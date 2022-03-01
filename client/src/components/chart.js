@@ -24,7 +24,7 @@ function PPM() {
       },
       yaxis: {
         min: 11,
-        max: 13
+        max: 14
       }
     },
 
@@ -68,8 +68,8 @@ function PPM() {
               categories: x
             },
             yaxis: {
-              min: yMin,
-              max: yMax
+              min: 11,
+              max: 14
             }
           },
 

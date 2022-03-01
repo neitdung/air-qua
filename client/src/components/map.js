@@ -92,7 +92,7 @@ export default function App() {
     return (
         <div className="App">
             <div>
-                <Button variant="contained" onClick={handleClickOpen}>
+                <Button style={{margin: "10px 0"}} variant="contained" onClick={handleClickOpen}>
                     Thêm thiết bị
                 </Button>
                 <Dialog open={open}>
