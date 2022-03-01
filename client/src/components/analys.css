@@ -1,0 +1,10 @@
+.analys-ppm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.ppm {
+    min-width: 40%;
+    margin: 20px 40px;
+}

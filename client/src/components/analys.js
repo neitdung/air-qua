@@ -3,48 +3,36 @@ import { useEffect, useState } from 'react';
 import Chart from "react-apexcharts";
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import MUITable from './table';
+import './analys.css';
 
 function Analys() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [items, setItems] = useState([]);
 
-    // Note: the empty deps array [] means
-    // this useEffect will run once
-    // similar to componentDidMount()
-    useEffect(() => {
-        fetch("http://localhost:5000/min")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setIsLoaded(true);
-                    setItems(result);
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }, [])
+    // if (error) {
+    //     return <div>Error: {error.message}</div>;
+    // } else if (!isLoaded) {
+    //     return <div>Loading...</div>;
+    // } else {
+    //     return (
+    //         <MUITable url = {"http://localhost:5000/min"}/>
+    //     );
+    // }
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    } else if (!isLoaded) {
-        return <div>Loading...</div>;
-    } else {
-        return (
-            <ul>
-                {items.map(item => (
-                    <li key={item._id}>
-                        {item.value} {item.time}
-                    </li>
-                ))}
-            </ul>
-        );
-    }
+    return (
+        <div className="analys-ppm">
+            <div className="minPpm ppm">
+                <MUITable url = {"http://localhost:5000/min"} timeFormat = "min"/>
+            </div>
+            <div className="hourPpm ppm">
+                <MUITable url = {"http://localhost:5000/hour"} timeFormat = "hour"/>
+            </div>
+            <div className="dayPpm ppm">
+                <MUITable url = {"http://localhost:5000/day"} timeFormat = "day"/>
+            </div>
+        </div>
+    );
 }
 
 export default Analys;
