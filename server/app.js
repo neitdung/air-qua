@@ -5,7 +5,14 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const PPMController = require('./controller/PPMController');
+const MINController = require('./controller/min.controller');
+const HOURController = require('./controller/hour.controller');
+const DAYController = require('./controller/day.controller');
 const PPM = require('./model/ppm.model');
+const MIN = require('./model/min.model');
+const HOUR = require('./model/hour.model');
+const DAY = require('./model/day.model');
+const cors = require('cors');
 
 const os = require('os-utils');
 // const passport = require("passport");
@@ -30,7 +37,11 @@ mongoose.Promise = global.Promise;
 // app.use("/api/hour/", require("./route/hour"));
 // app.use("/api/user/", require("./route/user"));
 // app.use("/api/week/", require("./route/week"));
+app.use(cors());
 app.use('/get', PPMController.show);
+app.use('/min', MINController.show);
+app.use('/hour', HOURController.show);
+app.use('/day', DAYController.show);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}`));
@@ -68,22 +79,27 @@ client.on('error', function (error) {
   console.log(error);
 });
 
+var currentPPM = 0;
+
 io.on('connection', socketClient => {
   client.on('message', function (topic, message) {
     let arr = message.toString().split(",");
+    let ppmValue = Math.round(parseFloat(12 + parseFloat(arr[1]) - Math.floor(arr[1])) * 1000) / 1000;
+    currentPPM = ppmValue;
+
     socketClient.emit('ppm', {
       name: tick++,
-      value: Math.round(parseFloat(12 + parseFloat(arr[1]) - Math.floor(arr[1])) * 1000)/1000
+      value: ppmValue
     });
-    
-    // let currentdate = new Date();
-    // const ppm = new PPM({
-    //   time: currentdate,
-    //   value: arr[1]
-    // });
-    // ppm.save()
-    //   .then(() => true)
-    //   .catch(() => false);
+
+    let currentdate = new Date();
+    const ppm = new PPM({
+      time: currentdate,
+      value: ppmValue
+    });
+    ppm.save()
+      .then(() => true)
+      .catch(() => false);
   });
 });
 
@@ -93,6 +109,38 @@ client.subscribe('/hust/c3c05bf6b7ff4f5fa23905cb6c726879');
 // publish message 'Hello' to topic 'my/test/topic'
 // client.publish('my/test/topic', 'Hellpoooooooo');
 
-// setInterval(() => {
-//     client.publish('my/test/topic', '' + Math.random());
-// }, 1000);
+setInterval(() => {
+  let currentdate = new Date();
+  const minPpm = new MIN({
+    time: currentdate,
+    value: currentPPM
+  });
+
+  minPpm.save()
+    .then(() => true)
+    .catch(() => false);
+}, 60000);
+
+setInterval(() => {
+  let currentdate = new Date();
+  const hourPPM = new HOUR({
+    time: currentdate,
+    value: currentPPM
+  });
+
+  hourPPM.save()
+    .then(() => true)
+    .catch(() => false);
+}, 3600000);
+
+setInterval(() => {
+  let currentdate = new Date();
+  const dayPPM = new DAY({
+    time: currentdate,
+    value: currentPPM
+  });
+
+  dayPPM.save()
+    .then(() => true)
+    .catch(() => false);
+}, 86400000);

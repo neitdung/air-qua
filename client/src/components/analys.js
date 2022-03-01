@@ -5,104 +5,46 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 function Analys() {
-    let x = ['12/1', '13/1', '14/1', '15/1', '16/1', '17/1', '18/1', '19/1', '20/1', '21/1'],
-        y = [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.041, 12.051, 12.081];
+    const [error, setError] = useState(null);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [items, setItems] = useState([]);
 
-    let [data, setData] = useState({
-        options: {
-            chart: {
-                id: "basic-bar"
-            },
-            xaxis: {
-                categories: x
-            },
-            yaxis: {
-                min: 11,
-                max: 13
-            }
-        },
-
-        series: [
-            {
-                name: "ppm",
-                data: y
-            }
-        ]
-    });
-
-    const setDataChart = (xData, yData) => {
-        setData(currentData => {
-            currentData = {
-              options: {
-                chart: {
-                  id: "basic-bar",
-                  type: 'line',
-                  markers: {
-                    size: [5]
-                  }
+    // Note: the empty deps array [] means
+    // this useEffect will run once
+    // similar to componentDidMount()
+    useEffect(() => {
+        fetch("http://localhost:5000/min")
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    setIsLoaded(true);
+                    setItems(result);
                 },
-                xaxis: {
-                  categories: xData
-                },
-                yaxis: {
-                  min: yData[0] - 2,
-                  max: yData[0] + 2
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                (error) => {
+                    setIsLoaded(true);
+                    setError(error);
                 }
-              },
+            )
+    }, [])
 
-              series: [
-                {
-                  name: "ppm",
-                  data: yData
-                }
-              ]
-            }
-    
-            return currentData;
-          });
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    } else if (!isLoaded) {
+        return <div>Loading...</div>;
+    } else {
+        return (
+            <ul>
+                {items.map(item => (
+                    <li key={item._id}>
+                        {item.value} {item.time}
+                    </li>
+                ))}
+            </ul>
+        );
     }
-
-    const hour = () => {
-        setDataChart(
-            ['22:00', '23:00', '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00'],
-            [12.051, 12.151, 12.251, 12.351, 12.451, 12.591, 12.651, 12.741, 12.851, 12.981]
-        )
-    }
-
-    const day = () => {
-        setDataChart(
-            ['12/1', '13/1', '14/1', '15/1', '16/1', '17/1', '18/1', '19/1', '20/1', '21/1'],
-            [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.152, 12.251, 12.188]
-        )
-    }
-
-    const month = () => {
-        setDataChart(
-            ['04/2021', '05/2021', '06/2021', '07/2021', '08/2021', '09/2021', '10/2021', '11/2021', '12/2021', '01/2022'],
-            [12.051, 12.051, 12.151, 12.051, 12.251, 12.091, 12.051, 12.041, 12.051, 12.081]
-        )
-    }
-
-    // 2. render the line chart using the state
-    return (
-        <div className="app">
-            <Stack spacing={2} direction="row">
-                <Button onClick={hour} variant="contained">Giờ</Button>
-                <Button onClick={day} variant="contained">Ngày</Button>
-                <Button onClick={month} variant="contained">Tháng</Button>
-            </Stack>
-            <div className="row">
-                <div className="mixed-chart">
-                    <Chart
-                        options={data.options}
-                        series={data.series}
-                        type="line"
-                        width="900"
-                    />
-                </div>
-            </div>
-        </div>
-    );
-};
+}
 
 export default Analys;

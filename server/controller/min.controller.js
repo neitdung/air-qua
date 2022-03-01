@@ -1,8 +1,8 @@
-const HOUR = require('../model/hour.model');
+const MIN = require('../model/min.model');
 
-class HOURController {
+class MINController {
     show(req, res, next) {
-        HOUR.find({})
+        MIN.find({})
             .then(data => {
                 data = data.map(dt => dt ? dt.toObject() : dt);
                 res.json(data);
@@ -10,4 +10,4 @@ class HOURController {
     }
 }
 
-module.exports = new HOURController;
+module.exports = new MINController;
