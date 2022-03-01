@@ -84,6 +84,7 @@ var currentPPM = 0;
 io.on('connection', socketClient => {
   client.on('message', function (topic, message) {
     let arr = message.toString().split(",");
+    // console.log(message.toString());
     let ppmValue = Math.round(parseFloat(12 + parseFloat(arr[1]) - Math.floor(arr[1])) * 1000) / 1000;
     currentPPM = ppmValue;
 

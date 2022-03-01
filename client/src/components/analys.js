@@ -23,13 +23,16 @@ function Analys() {
     return (
         <div className="analys-ppm">
             <div className="minPpm ppm">
-                <MUITable url = {"http://localhost:5000/min"} timeFormat = "min"/>
+                <h3>Minutes</h3>
+                <MUITable url={"http://localhost:5000/min"} timeFormat="min" />
             </div>
             <div className="hourPpm ppm">
-                <MUITable url = {"http://localhost:5000/hour"} timeFormat = "hour"/>
+                <h3>Hour</h3>
+                <MUITable url={"http://localhost:5000/hour"} timeFormat="hour" />
             </div>
             <div className="dayPpm ppm">
-                <MUITable url = {"http://localhost:5000/day"} timeFormat = "day"/>
+                <h3>Day</h3>
+                <MUITable url={"http://localhost:5000/day"} timeFormat="day" />
             </div>
         </div>
     );
