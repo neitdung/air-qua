@@ -145,7 +145,7 @@ export default function App() {
                     language: "en",
                     region: "US"
                 }}
-                defaultCenter={{ lat: 21.027, lng: 105.834 }}
+                defaultCenter={{ lat: 21.077, lng: 105.100 }}
                 defaultZoom={15}
                 distanceToMouse={distanceToMouse}
             >
