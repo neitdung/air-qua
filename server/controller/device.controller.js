@@ -13,7 +13,8 @@ class DeviceController {
         let arrData = [];
         for (var i = 1; i <= devices; i++) {
             arrData.push({
-                id: (12 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4),
+                id: i,
+                value: (12 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(4),
                 title: 'ppm',
                 lat: (21 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(3),
                 lng: (105 + Math.random() * (0.120 - 0.0200) + 0.0200).toFixed(3),

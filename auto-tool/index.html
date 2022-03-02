@@ -43,6 +43,8 @@
             </div>
             <button id="submit" type="submit" class="btn btn-default">Submit</button>
         </form>
+        <div class="console">
+        </div>
     </div>
 
     <script>
@@ -78,7 +80,8 @@
                     method: 'GET'
                 })
                     .then(() => {
-                        console.log(arrData);
+                        $('.console').append("<br>" + JSON.stringify(arrData))
+                        $('.console').append("<br>" + 'Success!!!');
                     });
             }, time * 1000);
         }
@@ -87,6 +90,16 @@
     <style>
         .form-group {
             max-width: 300px;
+        }
+
+        .console {
+            position: relative;
+            left: 500px;
+            top: -175px;
+            border: 1px solid;
+            width: 500px;
+            height: 500px;
+            overflow: scroll;
         }
     </style>
 </body>

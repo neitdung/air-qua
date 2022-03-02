@@ -34,24 +34,31 @@ const socket = io('http://localhost:6001', {
     transports: ['websocket', 'polling'],
 });
 
+
+
+
 export default function App() {
-    let [points, setData] = useState([
-        { id: '11.915', title: "ppm", lat: 21.029, lng: 105.830 },
-        { id: '11.954', title: "ppm", lat: 21.024, lng: 105.840 },
-        { id: '11.928', title: "ppm", lat: 21.027, lng: 105.820 },
-        { id: '11.911', title: "ppm", lat: 21.033, lng: 105.822 },
-        { id: '11.917', title: "ppm", lat: 21.022, lng: 105.820 },
-        { id: '11.978', title: "ppm", lat: 21.021, lng: 105.830 },
-    ]);
+    let [points, setPoints] = useState([]);
+    function getDataDevices() {
+        fetch('http://localhost:5000/devices')
+           .then(res => res.json())
+           .then(
+               (result) => {
+                   setPoints( JSON.parse(result));
+               },
+               (error) => {
+                   // setIsLoaded(true);
+                   // setError(error);
+               }
+           )
+   }
+
+   useEffect(() => {
+    console.log(points);
+}, [points]);
 
     useEffect(() => {
-        socket.on('ppm', ppm => {
-            setData(currentData => {
-                currentData[0].id = ppm.value;
-
-                return currentData;
-            })
-        });
+        getDataDevices();
     }, []);
 
     let Node = {
@@ -70,7 +77,7 @@ export default function App() {
     const handleClose = (e) => {
         // console.log(e)
         setOpen(false);
-        setData(currentData => {
+        setPoints(currentData => {
             currentData.push(Node);
 
             return currentData;
@@ -81,7 +88,7 @@ export default function App() {
         Node.id = 12.755;
     }
 
-    const changeLat= (e) => {
+    const changeLat = (e) => {
         Node.lat = e.target.value;
     }
 
@@ -92,7 +99,7 @@ export default function App() {
     return (
         <div className="App">
             <div>
-                <Button style={{margin: "10px 0"}} variant="contained" onClick={handleClickOpen}>
+                <Button style={{ margin: "10px 0" }} variant="contained" onClick={handleClickOpen}>
                     Thêm thiết bị
                 </Button>
                 <Dialog open={open}>
@@ -142,9 +149,9 @@ export default function App() {
                 defaultZoom={15}
                 distanceToMouse={distanceToMouse}
             >
-                {points.map(({ lat, lng, id, title }) => {
+                {points && points.map(({ lat, lng, id, title, value }) => {
                     return (
-                        <MyMarker key={id} lat={lat} lng={lng} text={id} tooltip={title} />
+                        <MyMarker key={id} lat={lat} lng={lng} text={value} tooltip={title} />
                     );
                 })}
             </GoogleMapReact>
